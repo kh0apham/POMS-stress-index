@@ -96,6 +96,38 @@ def provide_suggestions():
     st.write("- [Samaritans (UK and Ireland)](https://www.samaritans.org)")
     st.write("- [National Alliance on Mental Illness (NAMI)](https://www.nami.org)")
 
+# Modify plot_radar_chart function to include color styling based on score
+def plot_radar_chart(scores):
+    factors = [
+        "Tension/Anxiety", "Depression", "Vigor (Energy)", "Fatigue", "Anger", 
+        "Calmness", "Overload", "Confidence/Optimism", "Frustration", "Hopelessness", 
+        "Social Connection", "Mental Focus"
+    ]
+    
+    # Map colors to scores
+    colors = ['green' if score <= 2 else 'yellow' if score == 3 else 'red' for score in scores]
+    
+    fig = go.Figure(data=[go.Scatterpolar(
+        r=scores,
+        theta=factors,
+        fill='toself',
+        name='User Stress Levels',
+        line=dict(color='blue'),
+        marker=dict(color=colors)  # Apply color based on stress level
+    )])
+
+    fig.update_layout(
+        polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=[1, 4]
+            )
+        ),
+        showlegend=False,
+        title="Stress Index Radar Chart"
+    )
+    st.plotly_chart(fig)
+
 # Main function to run the app
 def main():
     st.title("POMS Stress Index Calculator")
@@ -114,10 +146,15 @@ def main():
     social_connection_level = st.slider("Social Connection", 1, 4, 2, step=1, format="Stress level: %d")
     mental_focus_level = st.slider("Mental Focus", 1, 4, 2, step=1, format="Stress level: %d")
     
+    # Collect all scores in a list
+    scores = [
+        tension_level, depression_level, vigor_level, fatigue_level, anger_level,
+        calmness_level, overload_level, confidence_level, frustration_level, hopelessness_level,
+        social_connection_level, mental_focus_level
+    ]
+    
     # Calculate the total score based on the user responses
-    total_score = (tension_level + depression_level + vigor_level + fatigue_level + anger_level + 
-                   calmness_level + overload_level + confidence_level + frustration_level + 
-                   hopelessness_level + social_connection_level + mental_focus_level)
+    total_score = sum(scores)
     
     # Suggest activities based on score
     if total_score <= 24:
@@ -126,9 +163,12 @@ def main():
         st.write("Your stress level is moderate. Take some time to relax and practice stress-relief activities.")
     else:
         st.write("Your stress level is high. Consider seeking help and engaging in more intensive self-care practices.")
-
+    
     # Provide suggestions based on the user's input
     provide_suggestions()
+
+    # Plot the radar chart
+    plot_radar_chart(scores)
 
 if __name__ == "__main__":
     main()
