@@ -39,6 +39,33 @@ def collect_scores():
         scores[factor] = st.slider(f"{factor}: {description}", 0, 4, 2)
     return scores
 
+# Function to generate personalized reports with suggestions
+def generate_personalized_reports(scores):
+    reports = {}
+    for factor, score in scores.items():
+        if score <= 1:
+            # Low score: Positive feedback and encouragement
+            reports[factor] = {
+                "feedback": f"Your {factor} score is low, indicating that you are handling this area well. Keep up the good work!",
+                "short_term": "Continue practicing your healthy habits, such as regular exercise and mindful breathing, to maintain balance.",
+                "long_term": "Consider developing a long-term plan, such as maintaining consistent self-care routines and staying socially connected."
+            }
+        elif score == 2:
+            # Moderate score: Suggestions to monitor and maintain balance
+            reports[factor] = {
+                "feedback": f"Your {factor} score is moderate. You might want to monitor this area and use some strategies to maintain balance.",
+                "short_term": "Try stress-relieving activities like a 10-minute walk, journaling, or a brief mindfulness session.",
+                "long_term": "Consider setting long-term goals to reduce stress, such as scheduling regular relaxation breaks or developing better time management skills."
+            }
+        else:
+            # High score: Recommendations for seeking support or making lifestyle changes
+            reports[factor] = {
+                "feedback": f"Your {factor} score is high, suggesting that this area is impacting your well-being. Consider seeking support or using techniques to manage this stressor.",
+                "short_term": "Practice immediate stress relief methods like deep breathing, progressive muscle relaxation, or talking to a trusted friend.",
+                "long_term": "Explore options for long-term support, such as therapy, joining a support group, or developing a structured self-care plan."
+            }
+    return reports
+
 # Function to calculate and interpret stress index
 def calculate_stress_index(scores):
     total_score = sum(scores.values())
@@ -73,6 +100,14 @@ def calculate_stress_index(scores):
     )
 
     st.altair_chart(chart)
+
+    # Generate and display personalized reports
+    st.write("## Personalized Reports")
+    reports = generate_personalized_reports(scores)
+    for factor, report in reports.items():
+        st.write(f"**{factor}**: {report['feedback']}")
+        st.write(f"- **Short-term Suggestions**: {report['short_term']}")
+        st.write(f"- **Long-term Suggestions**: {report['long_term']}")
 
 # Main logic
 scores = collect_scores()
