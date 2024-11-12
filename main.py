@@ -32,6 +32,58 @@ factors = {
     "Overall Happiness": "Feeling happy and satisfied with life."
 }
 
+# Specific suggestions by factor
+suggestions = {
+    "Tension/Anxiety": {
+        "short_term": "Try deep breathing exercises or a quick mindfulness meditation.",
+        "long_term": "Consider incorporating regular relaxation practices like yoga or mindful breathing into your routine."
+    },
+    "Depression/Dejection": {
+        "short_term": "Engage in an activity you usually enjoy, like listening to uplifting music or going for a walk.",
+        "long_term": "It may help to talk to a counselor, and gradually build a routine around activities that bring joy."
+    },
+    "Anger/Hostility": {
+        "short_term": "Take a few moments to step away and cool down with deep breaths or a quick walk.",
+        "long_term": "Consider anger management techniques, like journaling your feelings or practicing assertive communication."
+    },
+    "Vigor/Activity": {
+        "short_term": "Boost energy by moving around, stretching, or drinking water if feeling low.",
+        "long_term": "Incorporate regular exercise, balanced diet, and adequate rest to maintain vigor over time."
+    },
+    "Fatigue/Inertia": {
+        "short_term": "Take a short, refreshing break – consider a power nap or stretching.",
+        "long_term": "Focus on a consistent sleep schedule, balanced diet, and exercise to improve energy levels sustainably."
+    },
+    "Confusion/Bewilderment": {
+        "short_term": "Organize tasks or take a quick break to clear your mind.",
+        "long_term": "Consider using productivity tools, like planners, to help structure your tasks and minimize confusion."
+    },
+    "Friendship/Social Support": {
+        "short_term": "Reach out to a friend or family member for a quick chat.",
+        "long_term": "Consider nurturing friendships by scheduling regular catch-ups or joining groups with shared interests."
+    },
+    "Academic Pressure": {
+        "short_term": "Break tasks down and start with one small part, or take a quick break if overwhelmed.",
+        "long_term": "Work on time management skills, and consider seeking support from advisors or tutors."
+    },
+    "Loneliness/Isolation": {
+        "short_term": "Reach out to someone you trust for a short chat or consider joining an online interest group.",
+        "long_term": "Consider engaging in social activities or volunteering to connect with others and reduce feelings of isolation."
+    },
+    "Self-Doubt": {
+        "short_term": "Write down recent achievements, however small, to boost self-confidence.",
+        "long_term": "Engage in personal development activities like skill-building and seek supportive mentors or coaches."
+    },
+    "Sleep Quality": {
+        "short_term": "Avoid screens before bed and create a calm bedtime environment.",
+        "long_term": "Develop a consistent sleep routine, possibly with relaxing activities before bed like reading or meditation."
+    },
+    "Overall Happiness": {
+        "short_term": "Engage in a feel-good activity, like listening to favorite music or spending time in nature.",
+        "long_term": "Focus on setting personal goals that align with your values and find ways to incorporate joy regularly into your life."
+    }
+}
+
 # Function to collect scores
 def collect_scores():
     scores = {}
@@ -47,22 +99,22 @@ def generate_personalized_reports(scores):
             # Low score: Positive feedback and encouragement
             reports[factor] = {
                 "feedback": f"Your {factor} score is low, indicating that you are handling this area well. Keep up the good work!",
-                "short_term": "Continue practicing your healthy habits, such as regular exercise and mindful breathing, to maintain balance.",
-                "long_term": "Consider developing a long-term plan, such as maintaining consistent self-care routines and staying socially connected."
+                "short_term": suggestions[factor]["short_term"],
+                "long_term": suggestions[factor]["long_term"]
             }
         elif score == 2:
             # Moderate score: Suggestions to monitor and maintain balance
             reports[factor] = {
                 "feedback": f"Your {factor} score is moderate. You might want to monitor this area and use some strategies to maintain balance.",
-                "short_term": "Try stress-relieving activities like a 10-minute walk, journaling, or a brief mindfulness session.",
-                "long_term": "Consider setting long-term goals to reduce stress, such as scheduling regular relaxation breaks or developing better time management skills."
+                "short_term": suggestions[factor]["short_term"],
+                "long_term": suggestions[factor]["long_term"]
             }
         else:
             # High score: Recommendations for seeking support or making lifestyle changes
             reports[factor] = {
                 "feedback": f"Your {factor} score is high, suggesting that this area is impacting your well-being. Consider seeking support or using techniques to manage this stressor.",
-                "short_term": "Practice immediate stress relief methods like deep breathing, progressive muscle relaxation, or talking to a trusted friend.",
-                "long_term": "Explore options for long-term support, such as therapy, joining a support group, or developing a structured self-care plan."
+                "short_term": suggestions[factor]["short_term"],
+                "long_term": suggestions[factor]["long_term"]
             }
     return reports
 
