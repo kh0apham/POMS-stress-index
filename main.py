@@ -11,7 +11,7 @@ st.set_page_config(
 st.title("POMS Stress Index Calculator")
 st.write("""
 This calculator helps you assess your stress levels based on the Profile of Mood States (POMS) framework. 
-Each factor has a score range from 0 (Not at all) to 4 (Extremely).
+Each factor has a score range from 0 (Not at all) to 4 (Extremely lol).
 """)
 
 # Dictionary of factors related to college students' mental health
