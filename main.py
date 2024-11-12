@@ -126,13 +126,24 @@ def calculate_stress_index(scores):
 
     # Create a DataFrame and add a color column based on thresholds
     df = pd.DataFrame(list(scores.items()), columns=["Factor", "Score"])
+
+    # Set color based on score thresholds
     df["Color"] = df["Score"].apply(lambda x: "green" if x <= 1 else ("yellow" if x <= 2 else "red"))
 
-    # Use Altair for the bar chart
+    # Define tooltip content based on color
+    df["Tooltip"] = df["Color"].apply(lambda x: (
+        "Low stress: Your mental health in this area is stable, and you're managing well." if x == "green" 
+        else "Moderate stress: This area might be affecting you. Consider using relaxation techniques."
+        if x == "yellow" 
+        else "High stress: This area is significantly impacting your well-being. Consider seeking professional support."
+    ))
+
+    # Create the chart with color and tooltips
     chart = alt.Chart(df).mark_bar().encode(
         x=alt.X("Factor", sort=None, title="Stress Factors"),
         y=alt.Y("Score", title="Score (0-4)"),
-        color=alt.Color("Color", scale=None)  # Use the colors specified in the DataFrame
+        color=alt.Color("Color", scale=None),  # Dynamically color the bars based on score
+        tooltip=["Factor", "Score", "Tooltip"]  # Tooltip with Factor name, Score, and Stress level explanation
     ).properties(
         title="Stress Factor Scores",
         width=600,
@@ -172,6 +183,6 @@ calculate_stress_index(scores)
 st.markdown("<br>", unsafe_allow_html=True)
 
 # Reset button with improved UI
-if st.button("Reset Scores", key="reset_button", help="Click here to reset your scores and start over"):
-    reset_app()  # Call the reset function to clear session state
-    st.experimental_rerun()  # Reload the page
+if st.button("Reset Inputs"):
+    reset_app()
+    st.experimental_rerun()  # Re-run the app after reset
