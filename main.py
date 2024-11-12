@@ -9,12 +9,15 @@ st.set_page_config(
     layout="centered"
 )
 
-# Title and description
+# Title and description with a more visually appealing layout
 st.title("POMS Stress Index Calculator")
-st.write("""
-This calculator helps you assess your stress levels based on the Profile of Mood States (POMS) framework. 
+st.markdown("""
+This calculator helps you assess your stress levels based on the Profile of Mood States (POMS) framework.
 Each factor has a score range from 0 (Not at all) to 4 (Extremely).
 """)
+
+# Add a divider for visual separation
+st.markdown("---")
 
 # Dictionary of factors related to college students' mental health
 factors = {
@@ -88,7 +91,7 @@ suggestions = {
 def collect_scores():
     scores = {}
     for factor, description in factors.items():
-        scores[factor] = st.slider(f"{factor}: {description}", 0, 4, 2)
+        scores[factor] = st.slider(f"{factor}: {description}", 0, 4, 2, step=1)
     return scores
 
 # Function to generate personalized reports only for high scores (3 or 4)
@@ -113,7 +116,7 @@ def calculate_stress_index(scores):
     # Add visual feedback
     st.progress(total_score / max_score)  # Progress bar
 
-    # Interpretation of stress levels
+    # Interpretation of stress levels with styled messages
     if total_score < len(factors) * 1:
         st.success("Your stress level appears to be low. Keep taking care of your well-being!")
     elif total_score < len(factors) * 2:
@@ -143,16 +146,32 @@ def calculate_stress_index(scores):
     reports = generate_personalized_reports(scores)
     if reports:
         for factor, report in reports.items():
-            st.write(f"**{factor}**: {report['feedback']}")
+            st.markdown(f"### {factor}")
+            st.write(f"**Feedback**: {report['feedback']}")
             st.write(f"- **Short-term Suggestions**: {report['short_term']}")
             st.write(f"- **Long-term Suggestions**: {report['long_term']}")
     else:
         st.write("No high scores were found. Keep up the good work!")
 
+# Function to reset the app
+def reset_app():
+    st.session_state.clear()  # Clear session state to reset all inputs
+
 # Main logic
+if "reset" in st.session_state:
+    del st.session_state["reset"]
+
+# Collecting scores and displaying results
 scores = collect_scores()
+
+# Add some padding around the result and chart
+st.markdown("<br>", unsafe_allow_html=True)
 calculate_stress_index(scores)
 
-# Reset button
-if st.button("Reset Scores"):
-    st.experimental_rerun()
+# Add some space
+st.markdown("<br>", unsafe_allow_html=True)
+
+# Reset button with improved UI
+if st.button("Reset Scores", key="reset_button", help="Click here to reset your scores and start over"):
+    reset_app()  # Call the reset function to clear session state
+    st.experimental_rerun()  # Reload the page
