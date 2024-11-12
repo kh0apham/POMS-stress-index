@@ -1,7 +1,6 @@
-pip install plotly
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+import altair as alt
 
 # Set page configuration
 st.set_page_config(
@@ -62,17 +61,18 @@ def calculate_stress_index(scores):
     df = pd.DataFrame(list(scores.items()), columns=["Factor", "Score"])
     df["Color"] = df["Score"].apply(lambda x: "green" if x <= 1 else ("yellow" if x <= 2 else "red"))
 
-    # Create a colored bar chart using Plotly
-    fig = px.bar(
-        df,
-        x="Factor",
-        y="Score",
-        color="Color",
-        color_discrete_map={"green": "green", "yellow": "yellow", "red": "red"},
+    # Use Altair for the bar chart
+    chart = alt.Chart(df).mark_bar().encode(
+        x=alt.X("Factor", sort=None, title="Stress Factors"),
+        y=alt.Y("Score", title="Score (0-4)"),
+        color=alt.Color("Color", scale=None)  # Use the colors specified in the DataFrame
+    ).properties(
         title="Stress Factor Scores",
-        labels={"Score": "Score (0-4)", "Factor": "Stress Factors"},
+        width=600,
+        height=400
     )
-    st.plotly_chart(fig)
+
+    st.altair_chart(chart)
 
 # Main logic
 scores = collect_scores()
