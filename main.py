@@ -91,26 +91,11 @@ def collect_scores():
         scores[factor] = st.slider(f"{factor}: {description}", 0, 4, 2)
     return scores
 
-# Function to generate personalized reports with suggestions
+# Function to generate personalized reports only for high scores (3 or 4)
 def generate_personalized_reports(scores):
     reports = {}
     for factor, score in scores.items():
-        if score <= 1:
-            # Low score: Positive feedback and encouragement
-            reports[factor] = {
-                "feedback": f"Your {factor} score is low, indicating that you are handling this area well. Keep up the good work!",
-                "short_term": suggestions[factor]["short_term"],
-                "long_term": suggestions[factor]["long_term"]
-            }
-        elif score == 2:
-            # Moderate score: Suggestions to monitor and maintain balance
-            reports[factor] = {
-                "feedback": f"Your {factor} score is moderate. You might want to monitor this area and use some strategies to maintain balance.",
-                "short_term": suggestions[factor]["short_term"],
-                "long_term": suggestions[factor]["long_term"]
-            }
-        else:
-            # High score: Recommendations for seeking support or making lifestyle changes
+        if score >= 3:  # Only show report for high scores (3 or 4)
             reports[factor] = {
                 "feedback": f"Your {factor} score is high, suggesting that this area is impacting your well-being. Consider seeking support or using techniques to manage this stressor.",
                 "short_term": suggestions[factor]["short_term"],
@@ -153,13 +138,16 @@ def calculate_stress_index(scores):
 
     st.altair_chart(chart)
 
-    # Generate and display personalized reports
-    st.write("## Personalized Reports")
+    # Generate and display personalized reports for high scores
+    st.write("## Personalized Reports (for high scores only)")
     reports = generate_personalized_reports(scores)
-    for factor, report in reports.items():
-        st.write(f"**{factor}**: {report['feedback']}")
-        st.write(f"- **Short-term Suggestions**: {report['short_term']}")
-        st.write(f"- **Long-term Suggestions**: {report['long_term']}")
+    if reports:
+        for factor, report in reports.items():
+            st.write(f"**{factor}**: {report['feedback']}")
+            st.write(f"- **Short-term Suggestions**: {report['short_term']}")
+            st.write(f"- **Long-term Suggestions**: {report['long_term']}")
+    else:
+        st.write("No high scores were found. Keep up the good work!")
 
 # Main logic
 scores = collect_scores()
