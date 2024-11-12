@@ -53,6 +53,4 @@ else:
 
 # Provide a reset button
 if st.button("Reset Scores"):
-    for factor in factors:
-        scores[factor] = 2
     st.experimental_rerun()
