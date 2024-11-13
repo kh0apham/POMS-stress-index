@@ -5,7 +5,7 @@ import altair as alt
 # Set page configuration
 st.set_page_config(
     page_title="POMS Stress Index Calculator",
-    page_icon="💭",
+    page_icon="💭", 
     layout="centered"
 )
 
@@ -164,25 +164,32 @@ def calculate_stress_index(scores):
     else:
         st.write("No high scores were found. Keep up the good work!")
 
+# Function to add stressor factors
+def ask_about_stressors():
+    st.subheader("Additional Stressor Factors")
+    stressors = st.multiselect(
+        "Please select any additional stressor factors you are currently facing:",
+        ["Workload", "Family Issues", "Financial Stress", "Health Issues", "Relationship Problems", "Other"]
+    )
+    if stressors:
+        st.write("You have selected the following stressors: ", ", ".join(stressors))
+    else:
+        st.write("No additional stressors selected.")
+
 # Function to reset the app
 def reset_app():
     st.session_state.clear()  # Clear session state to reset all inputs
 
 # Main logic
-if "reset" in st.session_state:
-    del st.session_state["reset"]
+if "reset" in st.session_state and st.session_state.reset:
+    reset_app()
 
-# Collecting scores and displaying results
+# Collect user input for stress factors
 scores = collect_scores()
 
-# Add some padding around the result and chart
-st.markdown("<br>", unsafe_allow_html=True)
-calculate_stress_index(scores)
+# Add the additional stressor section
+ask_about_stressors()
 
-# Add some space
-st.markdown("<br>", unsafe_allow_html=True)
-
-# Reset button with improved UI
-if st.button("Reset Inputs"):
-    reset_app()
-    st.experimental_rerun()  # Re-run the app after reset
+# Add a button to calculate the stress index and show results
+if st.button("Calculate Stress Index"):
+    calculate_stress_index(scores)
