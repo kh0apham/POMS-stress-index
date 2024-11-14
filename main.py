@@ -80,7 +80,7 @@ def generate_personalized_reports(scores):
             st.write(f"**Feedback**: {reports[question]['feedback']}")
 
             # Short-term goal checkbox with a unique key
-            short_term_key = f"short_term_{question.replace(' ', '_')}"
+            short_term_key = f"short_term_{question.replace(' ', '_')}_{score}"
             if short_term_key not in st.session_state:
                 st.session_state[short_term_key] = False
             short_term_goal = st.checkbox(f"Select Short-term Goal for {question}: {reports[question]['short_term']}", 
@@ -89,7 +89,7 @@ def generate_personalized_reports(scores):
                 selected_goals.append(f"Short-term Goal for {question}: {reports[question]['short_term']}")
 
             # Long-term goal checkbox with a unique key
-            long_term_key = f"long_term_{question.replace(' ', '_')}"
+            long_term_key = f"long_term_{question.replace(' ', '_')}_{score}"
             if long_term_key not in st.session_state:
                 st.session_state[long_term_key] = False
             long_term_goal = st.checkbox(f"Select Long-term Goal for {question}: {reports[question]['long_term']}", 
@@ -191,9 +191,8 @@ display_selected_goals(selected_goals)
 
 # Adding email input box and send button
 st.write("### Receive Your Report")
-email = st.text_input("Enter your email address to receive your report:")
-if st.button("Send"):
-    if email:
-        st.write(f"Report will be sent to: {email}.")
-    else:
-        st.write("Please enter a valid email address.")
+email = st.text_input("Enter your email address to receive your stress management report:")
+if email and '@' in email:
+    st.button("Send Report")
+else:
+    st.write("Please enter a valid email address.")
