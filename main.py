@@ -63,9 +63,10 @@ def collect_scores():
         scores[question] = st.slider(f"{question}: {description}", 1, 10, 5, step=1)
     return scores
 
-# Function to generate personalized reports only for high scores (7 or above)
+# Function to generate personalized reports with checkboxes for goals
 def generate_personalized_reports(scores):
     reports = {}
+    selected_goals = []  # List to store selected goals
     for question, score in scores.items():
         if score >= 7:  # Only show report for high scores (7 or above)
             reports[question] = {
@@ -73,7 +74,31 @@ def generate_personalized_reports(scores):
                 "short_term": suggestions[question]["short_term"],
                 "long_term": suggestions[question]["long_term"]
             }
-    return reports
+
+            # Display feedback and short-term/long-term suggestions with checkboxes
+            st.markdown(f"### {question}")
+            st.write(f"**Feedback**: {reports[question]['feedback']}")
+
+            # Short-term goal checkbox
+            short_term_goal = st.checkbox(f"Select Short-term Goal for {question}: {reports[question]['short_term']}")
+            if short_term_goal:
+                selected_goals.append(f"Short-term Goal for {question}: {reports[question]['short_term']}")
+
+            # Long-term goal checkbox
+            long_term_goal = st.checkbox(f"Select Long-term Goal for {question}: {reports[question]['long_term']}")
+            if long_term_goal:
+                selected_goals.append(f"Long-term Goal for {question}: {reports[question]['long_term']}")
+
+    return selected_goals
+
+# Function to display the list of selected goals
+def display_selected_goals(selected_goals):
+    if selected_goals:
+        st.write("### Your Selected Goals:")
+        for goal in selected_goals:
+            st.write(f"- {goal}")
+    else:
+        st.write("No goals selected yet. Check the boxes to add goals.")
 
 # Function to calculate and interpret stress index
 def calculate_stress_index(scores):
@@ -121,17 +146,11 @@ def calculate_stress_index(scores):
 
     st.altair_chart(chart)
 
-    # Generate and display personalized reports for high scores
-    st.write("## Personalized Reports (for high scores only)")
-    reports = generate_personalized_reports(scores)
-    if reports:
-        for question, report in reports.items():
-            st.markdown(f"### {question}")
-            st.write(f"**Feedback**: {report['feedback']}")
-            st.write(f"- **Short-term Suggestions**: {report['short_term']}")
-            st.write(f"- **Long-term Suggestions**: {report['long_term']}")
-    else:
-        st.write("No high scores were found. Keep up the good work!")
+    # Generate personalized reports and get selected goals
+    selected_goals = generate_personalized_reports(scores)
+
+    # Display the selected goals
+    display_selected_goals(selected_goals)
 
 # Function to add stressor factors
 def ask_about_stressors():
@@ -161,4 +180,5 @@ ask_about_stressors()
 
 # Add a button to calculate the stress index and show results
 if st.button("Calculate Stress Index"):
+    # Calculate and display stress index
     calculate_stress_index(scores)
