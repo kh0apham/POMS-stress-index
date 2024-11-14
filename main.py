@@ -174,8 +174,25 @@ def ask_about_stressors():
 def thank_you_message():
     st.markdown("Thank you for participating in the survey. We hope the insights help you better manage your stress levels!")
 
+# Ask about additional stressors first
+ask_about_stressors()
+
 # Collecting scores and calculating the stress index
 scores = collect_scores()
 calculate_stress_index(scores)
-ask_about_stressors()
+
+# Displaying the selected goals
+selected_goals = generate_personalized_reports(scores)
+display_selected_goals(selected_goals)
+
+# Adding email input box and send button
+st.write("### Receive Your Report")
+email = st.text_input("Enter your email address to receive your report:")
+if st.button("Send"):
+    if email:
+        st.write(f"Report will be sent to: {email}. (Feature not yet implemented.)")
+    else:
+        st.write("Please enter a valid email address.")
+
+# Displaying the thank you message
 thank_you_message()
