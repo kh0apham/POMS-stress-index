@@ -28,31 +28,31 @@ questions = {
     "Health Concerns": "How much do physical or mental health concerns, like sleep issues or anxiety, impact your stress levels?"
 }
 
-# Suggestions for additional stressors
-additional_stressor_suggestions = {
-    "Workload": {
-        "short_term": "Try breaking your tasks into smaller, manageable pieces and focus on one at a time.",
-        "long_term": "Consider adjusting your schedule and setting realistic goals to prevent overwork."
+# Short-term and Long-term goal suggestions for each slider
+goal_suggestions = {
+    "Classes and Assignments": {
+        "short_term": "Break tasks into smaller chunks to manage the workload.",
+        "long_term": "Develop a consistent study routine to reduce anxiety."
     },
-    "Family Issues": {
-        "short_term": "Reach out to a supportive family member or friend to share your feelings.",
-        "long_term": "Work on establishing boundaries and communication to reduce stress in the long run."
+    "Financial Worries": {
+        "short_term": "Track your spending and make a budget.",
+        "long_term": "Consider seeking financial counseling or additional financial aid."
     },
-    "Financial Stress": {
-        "short_term": "Create a budget or seek financial advice to manage immediate concerns.",
-        "long_term": "Look into scholarships, part-time jobs, or financial planning for long-term stability."
+    "Time Management": {
+        "short_term": "Use a daily planner to organize your schedule.",
+        "long_term": "Work on building habits for long-term time efficiency."
     },
-    "Health Issues": {
-        "short_term": "Consult with a healthcare professional for immediate support and relief.",
-        "long_term": "Focus on building a healthy routine, including regular exercise and a balanced diet."
+    "Career Uncertainty": {
+        "short_term": "Talk to a career counselor or mentor for advice.",
+        "long_term": "Explore internships and job shadowing opportunities to gain clarity."
     },
-    "Relationship Problems": {
-        "short_term": "Consider having an open and honest conversation with the person involved to clear up misunderstandings.",
-        "long_term": "Work on building strong communication skills and mutual respect in relationships."
+    "Social Life": {
+        "short_term": "Reach out to friends or join social groups to connect.",
+        "long_term": "Work on building meaningful, supportive relationships."
     },
-    "Other": {
-        "short_term": "Identify the specific issue and talk to someone you trust to gain perspective.",
-        "long_term": "Develop strategies to manage the situation, whether through counseling, time management, or other means."
+    "Health Concerns": {
+        "short_term": "Get enough sleep and exercise to improve your well-being.",
+        "long_term": "Develop a balanced lifestyle with regular physical and mental health care."
     }
 }
 
@@ -71,8 +71,8 @@ def generate_personalized_reports(scores):
         if score >= 7:  # Only show report for high scores (7 or above)
             reports[question] = {
                 "feedback": f"Your stress level regarding {question} is high. Consider implementing some strategies to manage this stressor.",
-                "short_term": additional_stressor_suggestions.get(question, {}).get("short_term", "No suggestion available."),
-                "long_term": additional_stressor_suggestions.get(question, {}).get("long_term", "No suggestion available.")
+                "short_term": goal_suggestions.get(question, {}).get("short_term", "No suggestion available."),
+                "long_term": goal_suggestions.get(question, {}).get("long_term", "No suggestion available.")
             }
 
             # Display feedback and short-term/long-term suggestions with checkboxes
@@ -172,11 +172,6 @@ def ask_about_stressors():
     )
     if stressors:
         st.write("You have selected the following stressors: ", ", ".join(stressors))
-        for stressor in stressors:
-            # Display short-term and long-term suggestions for each selected stressor
-            st.markdown(f"### {stressor} Suggestions")
-            st.write(f"**Short-term Tip**: {additional_stressor_suggestions[stressor]['short_term']}")
-            st.write(f"**Long-term Tip**: {additional_stressor_suggestions[stressor]['long_term']}")
 
 # Collecting stress level responses
 scores = collect_scores()
@@ -186,3 +181,9 @@ calculate_stress_index(scores)
 
 # Additional stressor inquiry
 ask_about_stressors()
+
+# Add an input box for the user's email at the bottom of the page
+email = st.text_input("Enter your email address for follow-up (optional):")
+
+if email:
+    st.write(f"Thank you for submitting your email: {email}. We will reach out to you if necessary.")
