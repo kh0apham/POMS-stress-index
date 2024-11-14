@@ -178,12 +178,11 @@ def ask_about_stressors():
             st.write(f"**Short-term Tip**: {additional_stressor_suggestions[stressor]['short_term']}")
             st.write(f"**Long-term Tip**: {additional_stressor_suggestions[stressor]['long_term']}")
 
-# Collect stress factor scores and display additional stressor suggestions
+# Collecting stress level responses
 scores = collect_scores()
-ask_about_stressors()
 
-# Show results based on scores
+# Calculate and display the stress index
 calculate_stress_index(scores)
 
-# Display thank you message
-st.markdown("### Thank you for completing the survey! We hope these insights help you manage your stress levels.")
+# Additional stressor inquiry
+ask_about_stressors()
