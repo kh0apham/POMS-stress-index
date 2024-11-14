@@ -79,19 +79,21 @@ def generate_personalized_reports(scores):
             st.markdown(f"### {question}")
             st.write(f"**Feedback**: {reports[question]['feedback']}")
 
-            # Short-term goal checkbox
-            if f"short_term_{question}" not in st.session_state:
-                st.session_state[f"short_term_{question}"] = False
+            # Short-term goal checkbox with unique key using the question name
+            short_term_key = f"short_term_{question.replace(' ', '_')}"
+            if short_term_key not in st.session_state:
+                st.session_state[short_term_key] = False
             short_term_goal = st.checkbox(f"Select Short-term Goal for {question}: {reports[question]['short_term']}", 
-                                         key=f"short_term_{question}")
+                                         key=short_term_key)
             if short_term_goal:
                 selected_goals.append(f"Short-term Goal for {question}: {reports[question]['short_term']}")
 
-            # Long-term goal checkbox
-            if f"long_term_{question}" not in st.session_state:
-                st.session_state[f"long_term_{question}"] = False
+            # Long-term goal checkbox with unique key using the question name
+            long_term_key = f"long_term_{question.replace(' ', '_')}"
+            if long_term_key not in st.session_state:
+                st.session_state[long_term_key] = False
             long_term_goal = st.checkbox(f"Select Long-term Goal for {question}: {reports[question]['long_term']}", 
-                                        key=f"long_term_{question}")
+                                        key=long_term_key)
             if long_term_goal:
                 selected_goals.append(f"Long-term Goal for {question}: {reports[question]['long_term']}")
 
@@ -158,7 +160,7 @@ def calculate_stress_index(scores):
     # Display the selected goals
     display_selected_goals(selected_goals)
 
-# Function to add stressor factors
+# Function to ask about additional stressors
 def ask_about_stressors():
     st.subheader("Additional Stressor Factors")
     stressors = st.multiselect(
@@ -174,11 +176,13 @@ def ask_about_stressors():
 def thank_you_message():
     st.markdown("Thank you for participating in the survey. We hope the insights help you better manage your stress levels!")
 
-# Ask about additional stressors first
-ask_about_stressors()
-
 # Collecting scores and calculating the stress index
 scores = collect_scores()
+
+# Ask about additional stressors after scores
+ask_about_stressors()
+
+# Calculate stress index
 calculate_stress_index(scores)
 
 # Displaying the selected goals
@@ -193,6 +197,3 @@ if st.button("Send"):
         st.write(f"Report will be sent to: {email}. (Feature not yet implemented.)")
     else:
         st.write("Please enter a valid email address.")
-
-# Displaying the thank you message
-thank_you_message()
