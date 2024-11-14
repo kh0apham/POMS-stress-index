@@ -28,31 +28,31 @@ questions = {
     "Health Concerns": "How much do physical or mental health concerns, like sleep issues or anxiety, impact your stress levels?"
 }
 
-# Specific suggestions by question
-suggestions = {
-    "Classes and Assignments": {
-        "short_term": "Break down assignments into smaller tasks and focus on one thing at a time.",
-        "long_term": "Consider improving time management skills and seeking academic support when needed."
+# Suggestions for additional stressors
+additional_stressor_suggestions = {
+    "Workload": {
+        "short_term": "Try breaking your tasks into smaller, manageable pieces and focus on one at a time.",
+        "long_term": "Consider adjusting your schedule and setting realistic goals to prevent overwork."
     },
-    "Financial Worries": {
-        "short_term": "Create a simple budget or seek financial aid to relieve immediate concerns.",
-        "long_term": "Work on long-term financial planning and explore scholarships or part-time job opportunities."
+    "Family Issues": {
+        "short_term": "Reach out to a supportive family member or friend to share your feelings.",
+        "long_term": "Work on establishing boundaries and communication to reduce stress in the long run."
     },
-    "Time Management": {
-        "short_term": "Use a planner or digital tools to organize your schedule and prioritize tasks.",
-        "long_term": "Develop time-blocking strategies and set realistic goals to balance work and life effectively."
+    "Financial Stress": {
+        "short_term": "Create a budget or seek financial advice to manage immediate concerns.",
+        "long_term": "Look into scholarships, part-time jobs, or financial planning for long-term stability."
     },
-    "Career Uncertainty": {
-        "short_term": "Reach out to a mentor or career advisor to gain clarity and perspective on your path.",
-        "long_term": "Invest time in career exploration through internships, networking, and skill-building."
+    "Health Issues": {
+        "short_term": "Consult with a healthcare professional for immediate support and relief.",
+        "long_term": "Focus on building a healthy routine, including regular exercise and a balanced diet."
     },
-    "Social Life": {
-        "short_term": "Reach out to a friend or family member to talk and connect for emotional support.",
-        "long_term": "Consider joining student organizations or social groups to build long-term friendships and reduce isolation."
+    "Relationship Problems": {
+        "short_term": "Consider having an open and honest conversation with the person involved to clear up misunderstandings.",
+        "long_term": "Work on building strong communication skills and mutual respect in relationships."
     },
-    "Health Concerns": {
-        "short_term": "Practice relaxation techniques, such as deep breathing, to calm the mind and reduce stress.",
-        "long_term": "Focus on regular physical activity, a balanced diet, and improving sleep hygiene to maintain long-term health."
+    "Other": {
+        "short_term": "Identify the specific issue and talk to someone you trust to gain perspective.",
+        "long_term": "Develop strategies to manage the situation, whether through counseling, time management, or other means."
     }
 }
 
@@ -97,12 +97,17 @@ def generate_personalized_reports(scores):
 
     return selected_goals
 
-# Function to display the list of selected goals
+# Function to display the list of selected goals in a nicely styled box
 def display_selected_goals(selected_goals):
     if selected_goals:
-        st.write("### Your Selected Goals:")
-        for goal in selected_goals:
-            st.write(f"- {goal}")
+        st.markdown("""
+        <div style="background-color: #f9f9f9; padding: 20px; border-radius: 10px; border: 1px solid #ddd; box-shadow: 2px 2px 12px rgba(0,0,0,0.1);">
+            <h3 style="color: #2c3e50;">Your Selected Goals</h3>
+            <ul style="list-style-type: none; padding-left: 0;">
+                """ + ''.join([f"<li style='margin: 5px 0; color: #2c3e50;'>{goal}</li>" for goal in selected_goals]) + """
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
     else:
         st.write("No goals selected yet. Check the boxes to add goals.")
 
@@ -158,7 +163,7 @@ def calculate_stress_index(scores):
     # Display the selected goals
     display_selected_goals(selected_goals)
 
-# Function to add stressor factors
+# Function to add stressor factors with suggestions
 def ask_about_stressors():
     st.subheader("Additional Stressor Factors")
     stressors = st.multiselect(
@@ -167,19 +172,18 @@ def ask_about_stressors():
     )
     if stressors:
         st.write("You have selected the following stressors: ", ", ".join(stressors))
-    else:
-        st.write("No additional stressors selected.")
+        for stressor in stressors:
+            # Display short-term and long-term suggestions for each selected stressor
+            st.markdown(f"### {stressor} Suggestions")
+            st.write(f"**Short-term Tip**: {additional_stressor_suggestions[stressor]['short_term']}")
+            st.write(f"**Long-term Tip**: {additional_stressor_suggestions[stressor]['long_term']}")
 
-# Function to display a thank you message
-def thank_you_message():
-    st.markdown("Thank you for participating in the survey. We hope the insights help you better manage your stress levels!")
-
-# Ask about additional stressors first
+# Collect stress factor scores and display additional stressor suggestions
+scores = collect_scores()
 ask_about_stressors()
 
-# Collecting scores and calculating the stress index
-scores = collect_scores()
+# Show results based on scores
 calculate_stress_index(scores)
 
-# Displaying the thank you message
-thank_you_message()
+# Display thank you message
+st.markdown("### Thank you for completing the survey! We hope these insights help you manage your stress levels.")
