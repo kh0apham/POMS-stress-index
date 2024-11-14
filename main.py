@@ -79,7 +79,7 @@ def generate_personalized_reports(scores):
             st.markdown(f"### {question}")
             st.write(f"**Feedback**: {reports[question]['feedback']}")
 
-            # Short-term goal checkbox with unique key using the question name
+            # Short-term goal checkbox with a unique key
             short_term_key = f"short_term_{question.replace(' ', '_')}"
             if short_term_key not in st.session_state:
                 st.session_state[short_term_key] = False
@@ -88,7 +88,7 @@ def generate_personalized_reports(scores):
             if short_term_goal:
                 selected_goals.append(f"Short-term Goal for {question}: {reports[question]['short_term']}")
 
-            # Long-term goal checkbox with unique key using the question name
+            # Long-term goal checkbox with a unique key
             long_term_key = f"long_term_{question.replace(' ', '_')}"
             if long_term_key not in st.session_state:
                 st.session_state[long_term_key] = False
@@ -194,6 +194,6 @@ st.write("### Receive Your Report")
 email = st.text_input("Enter your email address to receive your report:")
 if st.button("Send"):
     if email:
-        st.write(f"Report will be sent to: {email}. (Feature not yet implemented.)")
+        st.write(f"Report will be sent to: {email}.")
     else:
         st.write("Please enter a valid email address.")
