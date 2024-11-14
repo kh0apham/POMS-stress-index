@@ -71,8 +71,8 @@ def generate_personalized_reports(scores):
         if score >= 7:  # Only show report for high scores (7 or above)
             reports[question] = {
                 "feedback": f"Your stress level regarding {question} is high. Consider implementing some strategies to manage this stressor.",
-                "short_term": suggestions[question]["short_term"],
-                "long_term": suggestions[question]["long_term"]
+                "short_term": additional_stressor_suggestions.get(question, {}).get("short_term", "No suggestion available."),
+                "long_term": additional_stressor_suggestions.get(question, {}).get("long_term", "No suggestion available.")
             }
 
             # Display feedback and short-term/long-term suggestions with checkboxes
