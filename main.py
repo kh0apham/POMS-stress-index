@@ -80,12 +80,18 @@ def generate_personalized_reports(scores):
             st.write(f"**Feedback**: {reports[question]['feedback']}")
 
             # Short-term goal checkbox
-            short_term_goal = st.checkbox(f"Select Short-term Goal for {question}: {reports[question]['short_term']}")
+            if f"short_term_{question}" not in st.session_state:
+                st.session_state[f"short_term_{question}"] = False
+            short_term_goal = st.checkbox(f"Select Short-term Goal for {question}: {reports[question]['short_term']}", 
+                                         key=f"short_term_{question}")
             if short_term_goal:
                 selected_goals.append(f"Short-term Goal for {question}: {reports[question]['short_term']}")
 
             # Long-term goal checkbox
-            long_term_goal = st.checkbox(f"Select Long-term Goal for {question}: {reports[question]['long_term']}")
+            if f"long_term_{question}" not in st.session_state:
+                st.session_state[f"long_term_{question}"] = False
+            long_term_goal = st.checkbox(f"Select Long-term Goal for {question}: {reports[question]['long_term']}", 
+                                        key=f"long_term_{question}")
             if long_term_goal:
                 selected_goals.append(f"Long-term Goal for {question}: {reports[question]['long_term']}")
 
