@@ -170,21 +170,12 @@ def ask_about_stressors():
     else:
         st.write("No additional stressors selected.")
 
-# Function to reset the app
-def reset_app():
-    st.session_state.clear()  # Clear session state to reset all inputs
+# Function to display a thank you message
+def thank_you_message():
+    st.markdown("Thank you for participating in the survey. We hope the insights help you better manage your stress levels!")
 
-# Main logic
-if "reset" in st.session_state and st.session_state.reset:
-    reset_app()
-
-# Collect user input for stress factors
+# Collecting scores and calculating the stress index
 scores = collect_scores()
-
-# Add the additional stressor section
+calculate_stress_index(scores)
 ask_about_stressors()
-
-# Add a button to calculate the stress index and show results
-if st.button("Calculate Stress Index"):
-    # Calculate and display stress index
-    calculate_stress_index(scores)
+thank_you_message()
